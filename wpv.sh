@@ -9,15 +9,16 @@
 function print_help {
     echo "\
 Usage:
-    wpv -c [-s <sourcedir>] [-d <sitedir>]
+    wpv -c [-p <sitename>] [-s <sourcedir>] [-d <sitedir>]
     wpv -h
 
-    -c             Create site.
-    -s <sourcedir> Source/project directory. Defaults to current directory.
-    -d <sitedir>   Destination directory relative to <sourcedir>. This is where the WP install will live. Defaults to ''.
-    -n             Run non-interactive. Do not ask questions.
+    -c                Create site.
+    -p <projectname>  Use <projectname> as the name of the site.
+    -s <sourcedir>    Source/project directory. Defaults to current directory.
+    -d <sitedir>      Destination directory relative to <sourcedir>. This is where the WP install will live. Defaults to ''.
+    -n                Run non-interactive. Do not ask questions.
 
-    -h             Display help.
+    -h                Display help.
 
     Usage examples:
         wpv -d www    Sets up WP inside the "www" directory in the current folder. Asks for confirmation.
@@ -52,8 +53,9 @@ function trailingslashit {
 SRC_DIR=$(pwd)
 DEST_DIR=""
 
-while getopts ":cs:d:hn" argname; do
+while getopts "cp:s:d:hn" argname; do
     case $argname in
+        p) SITE_NAME="$OPTARG";;
         s) SRC_DIR="$OPTARG";;
         d) DEST_DIR="$OPTARG";;
         n) DONT_ASK=1;;
@@ -73,7 +75,10 @@ if [ ! -d "$SRC_DIR" ]; then
 fi
 
 # Figure out domain/db name
-SITE_NAME=`basename "$SRC_DIR"`
+if [ "$SITE_NAME" = "" ]; then
+    SITE_NAME=`basename "$SRC_DIR"`
+fi
+
 SITE_NAME=${SITE_NAME// /_}
 SITE_NAME=${SITE_NAME//[^a-zA-Z0-9_-]/}
 SITE_NAME=$(echo "$SITE_NAME" | tr A-Z a-z)
