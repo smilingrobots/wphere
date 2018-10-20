@@ -80,10 +80,10 @@ if [ "$SITE_NAME" = "" ]; then
 fi
 
 SITE_NAME=${SITE_NAME// /_}
-SITE_NAME=${SITE_NAME//[^a-zA-Z0-9_-]/}
+SITE_NAME=${SITE_NAME//[^a-zA-Z0-9_.-]/}
 SITE_NAME=$(echo "$SITE_NAME" | tr A-Z a-z)
 DOMAIN_NAME="$SITE_NAME.$(valet domain)"
-DB_NAME="$SITE_NAME"
+DB_NAME=${SITE_NAME//[.-]/_}
 
 # Make sure dest dir does not exist or is empty.
 DEST_DIR=$(untrailingslashit "$SRC_DIR/$DEST_DIR" )
@@ -111,7 +111,7 @@ fi
 
 # Everything checks out, last confirmation (maybe).
 if [ -z "$DONT_ASK" ]; then
-    echo "=> We're about to install a WordPress development environment in \"$DEST_DIR\" with domain name \"$DOMAIN_NAME\" and MySQL database \"$SITE_NAME\"."
+    echo "=> We're about to install a WordPress development environment in \"$DEST_DIR\" with domain name \"$DOMAIN_NAME\" and MySQL database \"$DB_NAME\"."
     read -p "=> Are we gonna do this?... (y/n) " -n 1 -r
     echo
 
