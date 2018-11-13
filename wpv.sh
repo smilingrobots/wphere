@@ -53,7 +53,7 @@ function trailingslashit {
 SRC_DIR=$(pwd)
 DEST_DIR=""
 
-while getopts "cp:s:d:hn" argname; do
+while getopts ":cp:s:d:hn" argname; do
     case $argname in
         p) SITE_NAME="$OPTARG";;
         s) SRC_DIR="$OPTARG";;
