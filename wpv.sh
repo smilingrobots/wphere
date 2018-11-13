@@ -20,8 +20,8 @@ Usage:
     -h             Display help.
 
     Usage examples:
-        wpv -d www    Sets up WP inside the "www" directory in the current folder. Asks for confirmation.
-        wpv -n        Sets up WP inside the current directory. Does not ask for confirmation.
+        wpv -c -d www    Sets up WP inside the "www" directory in the current folder. Asks for confirmation.
+        wpv -c -n        Sets up WP inside the current directory. Does not ask for confirmation.
 "
     exit 2
 }
