@@ -9,13 +9,12 @@
 function print_help {
     echo "\
 Usage:
-    wpv -c [-p <sitename>] [-s <sourcedir>] [-d <sitedir>]
+    wpv -c [-s <sitename>] [-d <sitedir>]
     wpv -h
 
     -c                Create site.
-    -p <projectname>  Use <projectname> as the name of the site.
-    -s <sourcedir>    Source/project directory. Defaults to current directory.
-    -d <sitedir>      Destination directory relative to <sourcedir>. This is where the WP install will live. Defaults to ''.
+    -s <sitename>     Use <sitename> as the name of the site.
+    -d <sitedir>      Destination directory relative to current directory. This is where the WP install will live. Defaults to ''.
     -n                Run non-interactive. Do not ask questions.
 
     -h                Display help.
@@ -53,10 +52,9 @@ function trailingslashit {
 SRC_DIR=$(pwd)
 DEST_DIR=""
 
-while getopts ":cp:s:d:hn" argname; do
+while getopts ":cs:d:hn" argname; do
     case $argname in
-        p) SITE_NAME="$OPTARG";;
-        s) SRC_DIR="$OPTARG";;
+        s) SITE_NAME="$OPTARG";;
         d) DEST_DIR="$OPTARG";;
         n) DONT_ASK=1;;
         c) DO_SOMETHING=1;;
@@ -66,12 +64,6 @@ done
 
 if [ -z "$DO_SOMETHING" ]; then
     print_help
-fi
-
-# Check source dir is valid.
-SRC_DIR=$(untrailingslashit "$SRC_DIR")
-if [ ! -d "$SRC_DIR" ]; then
-    err "\"$SRC_DIR\" is not a valid directory."
 fi
 
 # Figure out domain/db name
