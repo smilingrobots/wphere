@@ -9,15 +9,15 @@
 function print_help {
     echo "\
 Usage:
-    wpv -c [-s <sourcedir>] [-d <sitedir>]
+    wpv -c [-s <sitename>] [-d <sitedir>]
     wpv -h
 
-    -c             Create site.
-    -s <sourcedir> Source/project directory. Defaults to current directory.
-    -d <sitedir>   Destination directory relative to <sourcedir>. This is where the WP install will live. Defaults to ''.
-    -n             Run non-interactive. Do not ask questions.
+    -c                Create site.
+    -s <sitename>     Use <sitename> as the name of the site.
+    -d <sitedir>      Destination directory relative to current directory. This is where the WP install will live. Defaults to ''.
+    -n                Run non-interactive. Do not ask questions.
 
-    -h             Display help.
+    -h                Display help.
 
     Usage examples:
         wpv -c -d www    Sets up WP inside the "www" directory in the current folder. Asks for confirmation.
@@ -54,7 +54,7 @@ DEST_DIR=""
 
 while getopts ":cs:d:hn" argname; do
     case $argname in
-        s) SRC_DIR="$OPTARG";;
+        s) SITE_NAME="$OPTARG";;
         d) DEST_DIR="$OPTARG";;
         n) DONT_ASK=1;;
         c) DO_SOMETHING=1;;
@@ -66,19 +66,16 @@ if [ -z "$DO_SOMETHING" ]; then
     print_help
 fi
 
-# Check source dir is valid.
-SRC_DIR=$(untrailingslashit "$SRC_DIR")
-if [ ! -d "$SRC_DIR" ]; then
-    err "\"$SRC_DIR\" is not a valid directory."
+# Figure out domain/db name
+if [ "$SITE_NAME" = "" ]; then
+    SITE_NAME=`basename "$SRC_DIR"`
 fi
 
-# Figure out domain/db name
-SITE_NAME=`basename "$SRC_DIR"`
 SITE_NAME=${SITE_NAME// /_}
-SITE_NAME=${SITE_NAME//[^a-zA-Z0-9_-]/}
+SITE_NAME=${SITE_NAME//[^a-zA-Z0-9_.-]/}
 SITE_NAME=$(echo "$SITE_NAME" | tr A-Z a-z)
 DOMAIN_NAME="$SITE_NAME.$(valet domain)"
-DB_NAME="$SITE_NAME"
+DB_NAME=${SITE_NAME//[.-]/_}
 
 # Make sure dest dir does not exist or is empty.
 DEST_DIR=$(untrailingslashit "$SRC_DIR/$DEST_DIR" )
@@ -106,7 +103,7 @@ fi
 
 # Everything checks out, last confirmation (maybe).
 if [ -z "$DONT_ASK" ]; then
-    echo "=> We're about to install a WordPress development environment in \"$DEST_DIR\" with domain name \"$DOMAIN_NAME\" and MySQL database \"$SITE_NAME\"."
+    echo "=> We're about to install a WordPress development environment in \"$DEST_DIR\" with domain name \"$DOMAIN_NAME\" and MySQL database \"$DB_NAME\"."
     read -p "=> Are we gonna do this?... (y/n) " -n 1 -r
     echo
 
