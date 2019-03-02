@@ -116,7 +116,7 @@ fi
 # Proceed.
 echo "=> Working..."
 
-mkdir "$DEST_DIR"
+mkdir -p "$DEST_DIR"
 cd "$DEST_DIR"
 
 mysql -uroot -e "CREATE DATABASE ${DB_NAME}"
