@@ -153,11 +153,11 @@ wp plugin install ari-adminer --activate
 
 # Install & activate a special plugin with no content that can be used for quickly testing things.
 cat <<-EOF > "$DEST_DIR/wp-content/plugins/test-plugin.php"
-    <?php
-    /**
-     * Plugin Name: Test Plugin
-     * Description: This plugin contains no real code. Edit its content to quickly test things.
-     */
+<?php
+/**
+ * Plugin Name: Test Plugin
+ * Description: This plugin contains no real code. Edit its content to quickly test things.
+ */
 EOF
 wp plugin activate test-plugin
 
