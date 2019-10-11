@@ -122,7 +122,7 @@ cd "$DEST_DIR"
 mysql -uroot -e "CREATE DATABASE ${DB_NAME}"
 
 # WP core config.
-wp core download
+wp core download --path="$DEST_DIR"
 wp core config --dbname=$DB_NAME --dbuser=root --dbpass='' --extra-php <<-PHP
     define( 'WP_DEBUG', true );
 
